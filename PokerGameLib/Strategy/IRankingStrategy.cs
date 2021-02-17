@@ -5,7 +5,6 @@ namespace IQ.Game.Poker.Strategy
 {
     public interface IRankingStrategy
     {
-
         List<Player> GetWinners(List<Player> players);
     }
 }

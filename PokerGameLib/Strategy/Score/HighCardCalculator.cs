@@ -11,17 +11,18 @@ namespace IQ.Game.Poker.Strategy.Score
     public class HighCardCalculator : ScoreCalculator
     {
         private const uint Weight = 12;
-        public HighCardCalculator() {
+        private static readonly HighCardCalculator _calculator = new HighCardCalculator();
+        private HighCardCalculator()
+        {
             CardsType = HandType.HighCard;
         }
-
+        public static HighCardCalculator Instance()
+        {
+            return _calculator;
+        }
         public override uint Calculate(List<Card> cards)
         {
-
-            if (HandUtils.GetHandType(cards) != HandType.HighCard)
-            {
-                throw new Exception($"Invalid HandType!!");
-            }
+            base.Validate(cards);
 
             uint score = 0;
             List<Card> sortedCards = cards.OrderByDescending(card => card.Rank).ToList();

@@ -35,7 +35,7 @@ namespace IQ.Game.Poker
 
             if (this._rankingStrategy == null)
             {
-                throw new Exception($"Ranking strategy cannot be null!!");
+                throw new ArgumentException($"Ranking strategy cannot be null!!", "rankingStrategy");
             }
 
             return _rankingStrategy.GetWinners(players);

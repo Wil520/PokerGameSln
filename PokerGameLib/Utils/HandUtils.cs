@@ -8,17 +8,18 @@ namespace IQ.Game.Poker.Utils
 {
     public static class HandUtils
     {
+        public const int CardNumber = 5;
         public static HandType GetHandType(List<Card> cards)
         {
 
             if (cards == null || cards.Count == 0)
             {
-                throw new Exception($"No cards!!");
+                throw new ArgumentException($"No cards!!", "cards");
             }
 
-            if (cards.Count != 5)
+            if (cards.Count != CardNumber)
             {
-                throw new Exception($"Card number must be 5!!");
+                throw new ArgumentException($"Card number must be {CardNumber}!!", "cards");
             }
 
             Card firstCard = cards.First();
@@ -35,13 +36,13 @@ namespace IQ.Game.Poker.Utils
             }).OrderByDescending(elem => elem.Count)
             .ThenByDescending(elem => elem.Rank);
 
-            var topCountByRank = countByRank.First();        
+            var topCountByRank = countByRank.First();
 
             if (topCountByRank.Count == 4)
             {
                 throw new NotImplementedException($"Four of a Kind not implemented!!");
             }
-            
+
             bool isThreeOfAKind = topCountByRank.Count == 3;
             if (isThreeOfAKind)
             {
