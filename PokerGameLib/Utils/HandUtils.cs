@@ -9,7 +9,7 @@ namespace IQ.Game.Poker.Utils
     public static class HandUtils
     {
         public const int CardNumber = 5;
-        public static HandType GetHandType(List<Card> cards)
+        public static HandType GetHandType(ISet<Card> cards)
         {
 
             if (cards == null || cards.Count == 0)

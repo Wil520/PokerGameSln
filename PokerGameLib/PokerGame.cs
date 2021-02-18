@@ -25,7 +25,7 @@ namespace IQ.Game.Poker
             this._rankingStrategy = rankingStrategy;
         }
 
-        public List<Player> GetWinners(List<Player> players)
+        public IList<Player> GetWinners(ICollection<Player> players)
         {
             if (players == null || players.Count == 0)
             {

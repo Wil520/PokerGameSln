@@ -8,7 +8,7 @@ namespace IQ.Game.Poker.Strategy.Score
 {
     public class BasicScoreRankingStrategy : IRankingStrategy
     {
-        public List<Player> GetWinners(List<Player> players)
+        public IList<Player> GetWinners(ICollection<Player> players)
         {
 
             if (players == null || players.Count == 0)
@@ -23,9 +23,9 @@ namespace IQ.Game.Poker.Strategy.Score
                 player.CardsType = calculator.CardsType;
                 player.Score = calculator.Calculate(player.Cards);
 
-                Console.WriteLine($"Player name: {player.PlayerName}, player hand type: {player.CardsType}, player score: {player.Score}.");
+                Console.WriteLine($"Player - {player}");
             }
-
+            
             IOrderedEnumerable<Player> sortedPlayers = players
                 .OrderBy(player => player.CardsType)
                 .ThenByDescending(player => player.Score);

@@ -1,6 +1,8 @@
+using System;
+
 namespace IQ.Game.Poker.Models
 {
-    public class Card
+    public class Card : IEquatable<Card>
     {
         public CardSuit Suit { get; private set; }
         public CardRank Rank { get; private set; }
@@ -10,6 +12,64 @@ namespace IQ.Game.Poker.Models
             this.Suit = suit;
             this.Rank = rank;
         }
+
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as Card);
+        }
+
+        public bool Equals(Card c)
+        {
+            if (Object.ReferenceEquals(c, null))
+            {
+                return false;
+            }
+
+            if (Object.ReferenceEquals(this, c))
+            {
+                return true;
+            }
+
+            if (this.GetType() != c.GetType())
+            {
+                return false;
+            }
+
+            return (Suit == c.Suit) && (Rank == c.Rank);
+        }
+
+        public override int GetHashCode()
+        {
+            return (int)Suit ^ (int)Rank;
+        }
+
+        public static bool operator ==(Card lc, Card rc)
+        {
+            // Check for null on left side.
+            if (Object.ReferenceEquals(lc, null))
+            {
+                if (Object.ReferenceEquals(rc, null))
+                {
+                    // null == null = true.
+                    return true;
+                }
+                // Only the left side is null.
+                return false;
+            }
+            // Equals handles case of null on right side.
+            return lc.Equals(rc);
+        }
+
+        public static bool operator !=(Card lc, Card rc)
+        {
+            return !(lc == rc);
+        }
+
+        public override string ToString()
+        {
+            return this.Suit.ToString()[0] + "" + (uint)this.Rank;
+        }
+
     }
 
     public enum CardSuit

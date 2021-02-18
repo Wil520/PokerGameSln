@@ -21,18 +21,18 @@ namespace IQ.Game.Poker.Strategy.Score
             _calculatorDict.Add(HandType.HighCard, HighCardCalculator.Instance());
         }
 
-        public static ScoreCalculator GetCalculator(List<Card> cards)
+        public static ScoreCalculator GetCalculator(ISet<Card> cards)
         {
             return _calculatorDict[HandUtils.GetHandType(cards)];
         }
 
-        protected void Validate(List<Card> cards) {
+        protected void Validate(ISet<Card> cards) {
             if (HandUtils.GetHandType(cards) != CardsType)
             {
                 throw new ArgumentException($"Hand type must be {CardsType}!!", "cards");
             }
         }
 
-        public abstract uint Calculate(List<Card> cards);
+        public abstract uint Calculate(ISet<Card> cards);
     }
 }
