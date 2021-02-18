@@ -40,7 +40,7 @@ namespace IQ.Game.Poker.Models
 
         public override int GetHashCode()
         {
-            return (int)Suit ^ (int)Rank;
+            return Tuple.Create(Suit, Rank).GetHashCode();
         }
 
         public static bool operator ==(Card lc, Card rc)

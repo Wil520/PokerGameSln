@@ -6,13 +6,13 @@ namespace IQ.Game.Poker.Models
     {
         public string PlayerName { get; private set; }
 
-        public ISet<Card> Cards { get; private set; }
+        public IList<Card> Cards { get; private set; }
 
         public HandType CardsType { get; set; }
 
         public uint Score { get; set; }
 
-        public Player(string playerName, ISet<Card> cards)
+        public Player(string playerName, IList<Card> cards)
         {
             this.PlayerName = playerName;
             this.Cards = cards;

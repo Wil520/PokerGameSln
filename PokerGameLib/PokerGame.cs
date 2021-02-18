@@ -38,8 +38,30 @@ namespace IQ.Game.Poker
                 throw new ArgumentException($"Ranking strategy cannot be null!!", "rankingStrategy");
             }
 
-            return _rankingStrategy.GetWinners(players);
+            var winners = _rankingStrategy.GetWinners(players);
+
+            Log(players, winners);
+
+            return winners;
         }
 
+        private static void Log(ICollection<Player> players, IList<Player> winners)
+        {
+            Console.WriteLine("Players:");
+            Console.WriteLine("-----------------------------");
+            foreach (var player in players)
+            {
+                Console.WriteLine(player);
+            }
+            Console.WriteLine("-----------------------------");
+
+            Console.WriteLine("Winners:");
+            Console.WriteLine("-----------------------------");
+            foreach (var winner in winners)
+            {
+                Console.WriteLine(winner);
+            }
+            Console.WriteLine("-----------------------------");
+        }
     }
 }

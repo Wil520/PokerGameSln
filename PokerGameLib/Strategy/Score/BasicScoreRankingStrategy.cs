@@ -22,8 +22,6 @@ namespace IQ.Game.Poker.Strategy.Score
                 ScoreCalculator calculator = ScoreCalculator.GetCalculator(player.Cards);
                 player.CardsType = calculator.CardsType;
                 player.Score = calculator.Calculate(player.Cards);
-
-                Console.WriteLine($"Player - {player}");
             }
             
             IOrderedEnumerable<Player> sortedPlayers = players

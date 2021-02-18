@@ -20,7 +20,7 @@ namespace IQ.Game.Poker.Strategy.Score
         {
             return _calculator;
         }
-        public override uint Calculate(ISet<Card> cards)
+        public override uint Calculate(IList<Card> cards)
         {
             base.Validate(cards);
 
