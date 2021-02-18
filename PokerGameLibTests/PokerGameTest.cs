@@ -163,6 +163,7 @@ namespace IQ.Game.Poker.Test
         [Fact]
         public void Flush_one_winner()
         {
+            //Arrange
             PokerGame pg = new PokerGame();
 
             Player player1 = HandCreator.CreatePlayer("player1", new (CardSuit, CardRank)[]
@@ -215,6 +216,7 @@ namespace IQ.Game.Poker.Test
         [Fact]
         public void Flush_two_winners()
         {
+            //Arrange
             PokerGame pg = new PokerGame();
 
             Player player1 = HandCreator.CreatePlayer("player1", new (CardSuit, CardRank)[]
@@ -269,6 +271,316 @@ namespace IQ.Game.Poker.Test
                 {
                     Assert.Equal("player4", item.PlayerName);
                     Assert.Equal(HandType.Flush, item.CardsType);
+                });
+        }
+
+        [Fact]
+        public void ThreeOfAKind_three_players()
+        {
+            //Arrange
+            PokerGame pg = new PokerGame();
+            Player player2 = HandCreator.CreatePlayer("player2", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.Seven),
+                (CardSuit.Clubs, CardRank.Seven),
+                (CardSuit.Hearts, CardRank.Seven),
+                (CardSuit.Hearts, CardRank.Six),
+                (CardSuit.Diamonds, CardRank.Ace)
+            });
+            Player player3 = HandCreator.CreatePlayer("player3", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.Nine),
+                (CardSuit.Clubs, CardRank.Nine),
+                (CardSuit.Hearts, CardRank.Nine),
+                (CardSuit.Spades, CardRank.Seven),
+                (CardSuit.Diamonds, CardRank.King)
+            });
+            Player player4 = HandCreator.CreatePlayer("player4", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.Jack),
+                (CardSuit.Clubs, CardRank.Jack),
+                (CardSuit.Hearts, CardRank.Jack),
+                (CardSuit.Spades, CardRank.Three),
+                (CardSuit.Hearts, CardRank.Two)
+            });
+
+            var players = new List<Player> { player2, player3, player4 };
+
+            //Act
+            var winners = pg.GetWinners(players);
+
+            //Assert
+            Assert.Single(winners);
+            Assert.Equal("player4", winners[0].PlayerName);
+            Assert.Equal(HandType.ThreeOfAKind, winners[0].CardsType);
+        }
+
+        [Fact]
+        public void ThreeOfAKind_four_players()
+        {
+            //Arrange
+            PokerGame pg = new PokerGame();
+            Player player1 = HandCreator.CreatePlayer("player1", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.King),
+                (CardSuit.Clubs, CardRank.King),
+                (CardSuit.Hearts, CardRank.King),
+                (CardSuit.Spades, CardRank.Ace),
+                (CardSuit.Hearts, CardRank.Queen)
+            });
+            Player player2 = HandCreator.CreatePlayer("player2", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.Ace),
+                (CardSuit.Clubs, CardRank.Ace),
+                (CardSuit.Hearts, CardRank.Ace),
+                (CardSuit.Hearts, CardRank.Two),
+                (CardSuit.Diamonds, CardRank.Three)
+            });
+            Player player3 = HandCreator.CreatePlayer("player3", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.Nine),
+                (CardSuit.Clubs, CardRank.Nine),
+                (CardSuit.Hearts, CardRank.Nine),
+                (CardSuit.Spades, CardRank.Seven),
+                (CardSuit.Spades, CardRank.King)
+            });
+            Player player4 = HandCreator.CreatePlayer("player4", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.Jack),
+                (CardSuit.Clubs, CardRank.Jack),
+                (CardSuit.Hearts, CardRank.Jack),
+                (CardSuit.Spades, CardRank.Ten),
+                (CardSuit.Hearts, CardRank.Eight)
+            });
+
+            var players = new List<Player> { player1, player2, player3, player4 };
+
+            //Act
+            var winners = pg.GetWinners(players);
+
+            //Assert
+            Assert.Single(winners);
+            Assert.Equal("player2", winners[0].PlayerName);
+            Assert.Equal(HandType.ThreeOfAKind, winners[0].CardsType);
+        }
+
+        [Fact]
+        public void OnePair_one_winner()
+        {
+            //Arrange
+            PokerGame pg = new PokerGame();
+            Player player1 = HandCreator.CreatePlayer("player1", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.Nine),
+                (CardSuit.Clubs, CardRank.Nine),
+                (CardSuit.Hearts, CardRank.Ten),
+                (CardSuit.Spades, CardRank.Seven),
+                (CardSuit.Spades, CardRank.King)
+            });
+            Player player2 = HandCreator.CreatePlayer("player2", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.Ace),
+                (CardSuit.Clubs, CardRank.Ace),
+                (CardSuit.Hearts, CardRank.Four),
+                (CardSuit.Hearts, CardRank.Two),
+                (CardSuit.Diamonds, CardRank.Three)
+            });
+            Player player3 = HandCreator.CreatePlayer("player3", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.King),
+                (CardSuit.Clubs, CardRank.King),
+                (CardSuit.Spades, CardRank.Jack),
+                (CardSuit.Spades, CardRank.Ace),
+                (CardSuit.Hearts, CardRank.Queen)
+            });
+            Player player4 = HandCreator.CreatePlayer("player4", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.Jack),
+                (CardSuit.Clubs, CardRank.Queen),
+                (CardSuit.Hearts, CardRank.Jack),
+                (CardSuit.Spades, CardRank.Ten),
+                (CardSuit.Hearts, CardRank.Ace)
+            });
+
+            var players = new List<Player> { player1, player2, player3, player4 };
+
+            //Act
+            var winners = pg.GetWinners(players);
+
+            //Assert
+            Assert.Single(winners);
+            Assert.Equal("player2", winners[0].PlayerName);
+            Assert.Equal(HandType.OnePair, winners[0].CardsType);
+        }
+
+        [Fact]
+        public void OnePair_two_winners()
+        {
+            //Arrange
+            PokerGame pg = new PokerGame();
+            Player player1 = HandCreator.CreatePlayer("player1", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.Nine),
+                (CardSuit.Clubs, CardRank.Nine),
+                (CardSuit.Hearts, CardRank.Queen),
+                (CardSuit.Spades, CardRank.Jack),
+                (CardSuit.Spades, CardRank.King)
+            });
+            Player player2 = HandCreator.CreatePlayer("player2", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.Ten),
+                (CardSuit.Clubs, CardRank.Ten),
+                (CardSuit.Hearts, CardRank.Four),
+                (CardSuit.Hearts, CardRank.Seven),
+                (CardSuit.Diamonds, CardRank.Eight)
+            });
+            Player player3 = HandCreator.CreatePlayer("player3", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Hearts, CardRank.Ten),
+                (CardSuit.Spades, CardRank.Ten),
+                (CardSuit.Spades, CardRank.Seven),
+                (CardSuit.Spades, CardRank.Four),
+                (CardSuit.Hearts, CardRank.Eight)
+            });
+            Player player4 = HandCreator.CreatePlayer("player4", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.King),
+                (CardSuit.Clubs, CardRank.Ace),
+                (CardSuit.Hearts, CardRank.Five),
+                (CardSuit.Spades, CardRank.Queen),
+                (CardSuit.Diamonds, CardRank.Five)
+            });
+
+            var players = new List<Player> { player1, player2, player3, player4 };
+
+            //Act
+            var winners = pg.GetWinners(players);
+
+            //Assert
+            Assert.Collection(winners,
+                item =>
+                {
+                    Assert.Equal("player2", item.PlayerName);
+                    Assert.Equal(HandType.OnePair, item.CardsType);
+                },
+                item =>
+                {
+                    Assert.Equal("player3", item.PlayerName);
+                    Assert.Equal(HandType.OnePair, item.CardsType);
+                });
+        }
+
+        [Fact]
+        public void HighCard_one_winner()
+        {
+            //Arrange
+            PokerGame pg = new PokerGame();
+
+            Player player1 = HandCreator.CreatePlayer("player1", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Spades, CardRank.King),
+                (CardSuit.Clubs, CardRank.Three),
+                (CardSuit.Clubs, CardRank.Four),
+                (CardSuit.Clubs, CardRank.Five),
+                (CardSuit.Clubs, CardRank.Six)
+            });
+
+            Player player2 = HandCreator.CreatePlayer("player2", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.Two),
+                (CardSuit.Hearts, CardRank.Three),
+                (CardSuit.Diamonds, CardRank.Four),
+                (CardSuit.Diamonds, CardRank.Queen),
+                (CardSuit.Diamonds, CardRank.King)
+            });
+
+            Player player3 = HandCreator.CreatePlayer("player3", new (CardSuit, CardRank)[]
+           {
+                (CardSuit.Hearts, CardRank.Nine),
+                (CardSuit.Hearts, CardRank.Ten),
+                (CardSuit.Clubs, CardRank.Jack),
+                (CardSuit.Hearts, CardRank.Queen),
+                (CardSuit.Hearts, CardRank.King)
+           });
+
+            Player player4 = HandCreator.CreatePlayer("player4", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Spades, CardRank.Two),
+                (CardSuit.Spades, CardRank.Three),
+                (CardSuit.Spades, CardRank.Four),
+                (CardSuit.Hearts, CardRank.Five),
+                (CardSuit.Spades, CardRank.Ace)
+            });
+
+            var players = new List<Player> { player1, player2, player3, player4 };
+
+            //Act
+            var winners = pg.GetWinners(players);
+
+            //Assert
+            Assert.Single(winners);
+            Assert.Equal("player4", winners[0].PlayerName);
+            Assert.Equal(HandType.HighCard, winners[0].CardsType);
+        }
+
+        [Fact]
+        public void HighCard_two_winners()
+        {
+            //Arrange
+            PokerGame pg = new PokerGame();
+
+            Player player1 = HandCreator.CreatePlayer("player1", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.Eight),
+                (CardSuit.Clubs, CardRank.Nine),
+                (CardSuit.Clubs, CardRank.Jack),
+                (CardSuit.Clubs, CardRank.Queen),
+                (CardSuit.Clubs, CardRank.King)
+            });
+
+            Player player2 = HandCreator.CreatePlayer("player2", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Hearts, CardRank.Eight),
+                (CardSuit.Diamonds, CardRank.Ten),
+                (CardSuit.Diamonds, CardRank.Jack),
+                (CardSuit.Diamonds, CardRank.Queen),
+                (CardSuit.Diamonds, CardRank.King)
+            });
+
+            Player player3 = HandCreator.CreatePlayer("player3", new (CardSuit, CardRank)[]
+           {
+                (CardSuit.Hearts, CardRank.Nine),
+                (CardSuit.Clubs, CardRank.Ten),
+                (CardSuit.Hearts, CardRank.Jack),
+                (CardSuit.Hearts, CardRank.Queen),
+                (CardSuit.Hearts, CardRank.King)
+           });
+
+            Player player4 = HandCreator.CreatePlayer("player4", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.Nine),
+                (CardSuit.Spades, CardRank.Ten),
+                (CardSuit.Spades, CardRank.Jack),
+                (CardSuit.Spades, CardRank.Queen),
+                (CardSuit.Spades, CardRank.King)
+            });
+
+            var players = new List<Player> { player1, player2, player3, player4 };
+
+            //Act
+            var winners = pg.GetWinners(players);
+
+            //Assert
+            Assert.Collection(winners,
+                item =>
+                {
+                    Assert.Equal("player3", item.PlayerName);
+                    Assert.Equal(HandType.HighCard, item.CardsType);
+                },
+                item =>
+                {
+                    Assert.Equal("player4", item.PlayerName);
+                    Assert.Equal(HandType.HighCard, item.CardsType);
                 });
         }
     }
