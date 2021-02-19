@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using IQ.Game.Poker.Models;
+using IQ.Game.Poker.Utils;
 
 namespace IQ.Game.Poker.Strategy.Score
 {
@@ -14,8 +15,9 @@ namespace IQ.Game.Poker.Strategy.Score
             if (players == null || players.Count == 0)
             {
                 return new List<Player>();
-
             }
+
+            HandUtils.CheckPlayers(players);
 
             foreach (var player in players)
             {

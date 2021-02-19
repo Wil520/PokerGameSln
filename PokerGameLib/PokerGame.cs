@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using IQ.Game.Poker.Models;
 using IQ.Game.Poker.Strategy;
 using IQ.Game.Poker.Strategy.Score;
+using IQ.Game.Poker.Utils;
 
 namespace IQ.Game.Poker
 {
@@ -30,13 +32,14 @@ namespace IQ.Game.Poker
             if (players == null || players.Count == 0)
             {
                 return new List<Player>();
-
             }
 
             if (this._rankingStrategy == null)
             {
-                throw new ArgumentException($"Ranking strategy cannot be null!!", "rankingStrategy");
+                throw new InvalidOperationException($"Cannot get winners without a ranking strategy!!");
             }
+
+            HandUtils.CheckPlayers(players);
 
             var winners = _rankingStrategy.GetWinners(players);
 
