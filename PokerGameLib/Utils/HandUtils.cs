@@ -72,6 +72,27 @@ namespace IQ.Game.Poker.Utils
                 cardList.AddRange(player.Cards);
             }
 
+            CheckCardEnum(cardList);
+
+            CheckDuplicatedCards(cardList);
+        }
+
+        private static void CheckCardEnum(List<Card> cardList)
+        {
+            foreach (var card in cardList)
+            {
+                if (!Enum.IsDefined(typeof(CardSuit), card.Suit))
+                {
+                    throw new ArgumentException($"Invalid CardSuit: {card.Suit}!!", "Card.Suit");
+                }
+                if (!Enum.IsDefined(typeof(CardRank), card.Rank))
+                {
+                    throw new ArgumentException($"Invalid CardRank: {card.Rank}!!", "Card.Rank");
+                }
+            }
+        }
+        private static void CheckDuplicatedCards(List<Card> cardList)
+        {
             IEnumerable<Card> duplicatedCards = cardList.GroupBy(card => card, (card, cards) => new
             {
                 Card = card,
@@ -81,10 +102,9 @@ namespace IQ.Game.Poker.Utils
 
             if (duplicatedCards.Count() > 0)
             {
-                throw new ArgumentException($"Duplicated cards: {string.Join(", ", duplicatedCards)}!!", "Cards");
+                throw new ArgumentException($"Duplicated cards: {string.Join(", ", duplicatedCards)}!!", "Player.Cards");
             }
         }
-
         private static void CheckPlayer(Player player)
         {
             if (player == null)
@@ -93,15 +113,15 @@ namespace IQ.Game.Poker.Utils
             }
             if (string.IsNullOrWhiteSpace(player.PlayerName))
             {
-                throw new ArgumentException($"Player must have a name!!", "PlayerName");
+                throw new ArgumentException($"Player must have a name!!", "Player.PlayerName");
             }
             if (player.Cards == null || player.Cards.Count == 0)
             {
-                throw new ArgumentException($"Player {player.PlayerName} has no cards!!", "Cards");
+                throw new ArgumentException($"Player {player.PlayerName} has no cards!!", "Player.Cards");
             }
             if (player.Cards.Count != CardNumber)
             {
-                throw new ArgumentException($"Player {player.PlayerName} must have {CardNumber} cards!!", "Cards");
+                throw new ArgumentException($"Player {player.PlayerName} must have {CardNumber} cards!!", "Player.Cards");
             }
         }
     }

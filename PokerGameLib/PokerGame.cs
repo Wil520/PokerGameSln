@@ -36,7 +36,7 @@ namespace IQ.Game.Poker
 
             if (this._rankingStrategy == null)
             {
-                throw new InvalidOperationException($"Cannot get winners without a ranking strategy!!");
+                throw new InvalidOperationException($"A ranking strategy is required to get winners!!");
             }
 
             HandUtils.CheckPlayers(players);
