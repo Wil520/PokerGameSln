@@ -232,6 +232,67 @@ namespace IQ.Game.Poker.Test
         }
 
         [Fact]
+        public void FourOfAKind_not_implemented()
+        {
+            //Arrange
+            PokerGame pg = new PokerGame();
+            Player player2 = HandCreator.CreatePlayer("player2", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.Seven),
+                (CardSuit.Clubs, CardRank.Seven),
+                (CardSuit.Hearts, CardRank.Seven),
+                (CardSuit.Hearts, CardRank.Six),
+                (CardSuit.Diamonds, CardRank.Ace)
+            });
+            //FourOfAKind
+            Player player3 = HandCreator.CreatePlayer("player3", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.Nine),
+                (CardSuit.Clubs, CardRank.Nine),
+                (CardSuit.Hearts, CardRank.Nine),
+                (CardSuit.Spades, CardRank.Nine),
+                (CardSuit.Diamonds, CardRank.King)
+            });
+
+            var players = new List<Player> { player2, player3 };
+
+            //Act and Assert
+            var ex = Assert.Throws<NotImplementedException>(() => pg.GetWinners(players));
+            Assert.Equal("Four of a Kind not implemented!!", ex.Message);
+        }
+
+        [Fact]
+        public void TwoPair_not_implemented()
+        {
+            //Arrange
+            PokerGame pg = new PokerGame();
+            //Two Pair
+            Player player2 = HandCreator.CreatePlayer("player2", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.Seven),
+                (CardSuit.Clubs, CardRank.Seven),
+                (CardSuit.Hearts, CardRank.Five),
+                (CardSuit.Spades, CardRank.Five),
+                (CardSuit.Diamonds, CardRank.Ace)
+            });
+            Player player3 = HandCreator.CreatePlayer("player3", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.Nine),
+                (CardSuit.Clubs, CardRank.Nine),
+                (CardSuit.Hearts, CardRank.Jack),
+                (CardSuit.Spades, CardRank.Ten),
+                (CardSuit.Diamonds, CardRank.King)
+            });
+
+            var players = new List<Player> { player2, player3 };
+
+            //Act and Assert
+            var ex = Assert.Throws<NotImplementedException>(() => pg.GetWinners(players));
+            Assert.Equal("Two Pair not implemented!!", ex.Message);
+        }
+
+
+        [Fact]
         public void No_players_returns_empty_collection()
         {
             //Arrange
