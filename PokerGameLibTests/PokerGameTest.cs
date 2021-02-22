@@ -5,13 +5,234 @@ using System.Collections.Generic;
 using IQ.Game.Poker.Models;
 using IQ.Game.Poker.Utils;
 using IQ.Game.Poker.Test.Utils;
+using IQ.Game.Poker.Strategy.Score;
 
 namespace IQ.Game.Poker.Test
 {
     public class PokerGameTest
     {
+
         [Fact]
-        public void NoPlayers_returns_empty_collection()
+        public void A_ranking_strategy_is_required()
+        {
+            //Arrange
+            PokerGame pg = new PokerGame(null);
+
+            Player player1 = HandCreator.CreatePlayer("player1", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Spades, CardRank.King),
+                (CardSuit.Clubs, CardRank.Three),
+                (CardSuit.Clubs, CardRank.Four),
+                (CardSuit.Clubs, CardRank.Five),
+                (CardSuit.Clubs, CardRank.Six)
+            });
+
+            var players = new List<Player> { player1 };
+
+            //Act and Assert
+            var expectedMessage = "A ranking strategy is required to get winners!!";
+            var ex1 = Assert.Throws<InvalidOperationException>(() => pg.GetWinners(players));
+            Assert.Equal(expectedMessage, ex1.Message);
+
+            //Arrange
+            pg = new PokerGame();
+            pg.setRankingStrategy(null);
+
+            //Act and Assert
+            var ex2 = Assert.Throws<InvalidOperationException>(() => pg.GetWinners(players));
+            Assert.Equal(expectedMessage, ex2.Message);
+        }
+
+        [Fact]
+        public void Player_cannot_be_null()
+        {
+            //Arrange
+            PokerGame pg = new PokerGame();
+
+            Player player1 = HandCreator.CreatePlayer("player1", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Spades, CardRank.King),
+                (CardSuit.Clubs, CardRank.Three),
+                (CardSuit.Clubs, CardRank.Four),
+                (CardSuit.Clubs, CardRank.Five),
+                (CardSuit.Clubs, CardRank.Six)
+            });
+
+            var players = new List<Player> { player1, null };
+
+            //Act and Assert
+            var ex = Assert.Throws<ArgumentException>(() => pg.GetWinners(players));
+            Assert.Equal("Player cannot be null!! (Parameter 'Player')", ex.Message);
+        }
+
+        [Fact]
+        public void Player_must_have_a_name()
+        {
+            //Arrange, PlayerName is null
+            PokerGame pg = new PokerGame();
+
+            Player player1 = HandCreator.CreatePlayer(null, new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Spades, CardRank.King),
+                (CardSuit.Clubs, CardRank.Three),
+                (CardSuit.Clubs, CardRank.Four),
+                (CardSuit.Clubs, CardRank.Five),
+                (CardSuit.Clubs, CardRank.Six)
+            });
+
+            var players = new List<Player> { player1 };
+
+            //Act and Assert
+            var expectedMessage = "Player must have a name!! (Parameter 'Player.PlayerName')";
+            var ex1 = Assert.Throws<ArgumentException>(() => pg.GetWinners(players));
+            Assert.Equal(expectedMessage, ex1.Message);
+
+            //Arrange, PlayerName is empty
+            Player player2 = HandCreator.CreatePlayer("", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Spades, CardRank.King),
+                (CardSuit.Clubs, CardRank.Three),
+                (CardSuit.Clubs, CardRank.Four),
+                (CardSuit.Clubs, CardRank.Five),
+                (CardSuit.Clubs, CardRank.Six)
+            });
+
+            players = new List<Player> { player2 };
+
+            //Act and Assert
+            var ex2 = Assert.Throws<ArgumentException>(() => pg.GetWinners(players));
+            Assert.Equal(expectedMessage, ex2.Message);
+
+            //Arrange, PlayerName is blank
+            Player player3 = HandCreator.CreatePlayer("  ", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Spades, CardRank.King),
+                (CardSuit.Clubs, CardRank.Three),
+                (CardSuit.Clubs, CardRank.Four),
+                (CardSuit.Clubs, CardRank.Five),
+                (CardSuit.Clubs, CardRank.Six)
+            });
+
+            players = new List<Player> { player3 };
+
+            //Act and Assert
+            var ex3 = Assert.Throws<ArgumentException>(() => pg.GetWinners(players));
+            Assert.Equal(expectedMessage, ex3.Message);
+        }
+
+        [Fact]
+        public void Player_must_have_cards()
+        {
+            //Arrange
+            PokerGame pg = new PokerGame();
+
+            Player player1 = HandCreator.CreatePlayer("player1", new (CardSuit, CardRank)[] { });
+
+            var players = new List<Player> { player1 };
+
+            //Act and Assert
+            var ex = Assert.Throws<ArgumentException>(() => pg.GetWinners(players));
+            Assert.Equal("Player player1 has no cards!! (Parameter 'Player.Cards')", ex.Message);
+        }
+
+        [Fact]
+        public void Player_card_number_must_be_equal_to_five()
+        {
+            //Arrange
+            PokerGame pg = new PokerGame();
+
+            Player player1 = HandCreator.CreatePlayer("player1", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Spades, CardRank.King),
+                (CardSuit.Clubs, CardRank.Three),
+                (CardSuit.Clubs, CardRank.Four),
+                (CardSuit.Clubs, CardRank.Six)
+            });
+
+            var players = new List<Player> { player1 };
+
+            //Act and Assert
+            var ex = Assert.Throws<ArgumentException>(() => pg.GetWinners(players));
+            Assert.Equal("Player player1 must have 5 cards!! (Parameter 'Player.Cards')", ex.Message);
+        }
+
+        [Fact]
+        public void Player_cannot_have_invalid_card_suit()
+        {
+            //Arrange
+            PokerGame pg = new PokerGame();
+
+            Player player1 = HandCreator.CreatePlayer("player1", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Spades, CardRank.King),
+                (CardSuit.Clubs, CardRank.Three),
+                (CardSuit.Clubs, CardRank.Four),
+                (CardSuit.Clubs, CardRank.Five),
+                ((CardSuit)4, CardRank.Six)
+            });
+
+            var players = new List<Player> { player1 };
+
+            //Act and Assert
+            var ex = Assert.Throws<ArgumentException>(() => pg.GetWinners(players));
+            Assert.Equal("Invalid CardSuit: 4!! (Parameter 'Card.Suit')", ex.Message);
+        }
+
+        [Fact]
+        public void Player_cannot_have_invalid_card_rank()
+        {
+            //Arrange
+            PokerGame pg = new PokerGame();
+
+            Player player1 = HandCreator.CreatePlayer("player1", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Spades, CardRank.King),
+                (CardSuit.Clubs, CardRank.Three),
+                (CardSuit.Clubs, CardRank.Four),
+                (CardSuit.Clubs, CardRank.Five),
+                (CardSuit.Clubs, (CardRank)15)
+            });
+
+            var players = new List<Player> { player1 };
+
+            //Act and Assert
+            var ex = Assert.Throws<ArgumentException>(() => pg.GetWinners(players));
+            Assert.Equal("Invalid CardRank: 15!! (Parameter 'Card.Rank')", ex.Message);
+        }
+
+        [Fact]
+        public void Players_cannot_have_duplicated_cards()
+        {
+            //Arrange
+            PokerGame pg = new PokerGame();
+
+            Player player3 = HandCreator.CreatePlayer("player3", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.Nine),
+                (CardSuit.Clubs, CardRank.Nine),    //duplicated
+                (CardSuit.Hearts, CardRank.Eight),
+                (CardSuit.Spades, CardRank.Seven),
+                (CardSuit.Diamonds, CardRank.Six)
+            });
+
+            Player player4 = HandCreator.CreatePlayer("player4", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Diamonds, CardRank.Ace),
+                (CardSuit.Clubs, CardRank.King),
+                (CardSuit.Hearts, CardRank.Queen),
+                (CardSuit.Spades, CardRank.Jack),
+                (CardSuit.Clubs, CardRank.Nine)     //duplicated
+            });
+
+            var players = new List<Player> { player3, player4 };
+
+            //Act and Assert
+            var ex = Assert.Throws<ArgumentException>(() => pg.GetWinners(players));
+            Assert.Equal("Duplicated cards: C9!! (Parameter 'Player.Cards')", ex.Message);
+        }
+
+        [Fact]
+        public void No_players_returns_empty_collection()
         {
             //Arrange
             PokerGame pg = new PokerGame();
@@ -24,6 +245,32 @@ namespace IQ.Game.Poker.Test
             winners = pg.GetWinners(new List<Player>());
             //Assert
             Assert.Empty(winners);
+        }
+
+        [Fact]
+        public void Only_one_player_returns_the_player()
+        {
+            //Arrange
+            PokerGame pg = new PokerGame();
+
+            Player player1 = HandCreator.CreatePlayer("player1", new (CardSuit, CardRank)[]
+            {
+                (CardSuit.Spades, CardRank.King),
+                (CardSuit.Clubs, CardRank.Three),
+                (CardSuit.Clubs, CardRank.Four),
+                (CardSuit.Clubs, CardRank.Five),
+                (CardSuit.Clubs, CardRank.Six)
+            });
+
+            var players = new List<Player> { player1 };
+
+            //Act
+            var winners = pg.GetWinners(players);
+
+            //Assert
+            Assert.Single(winners);
+            Assert.Equal("player1", winners[0].PlayerName);
+            Assert.Equal(HandType.HighCard, winners[0].CardsType);
         }
 
         [Fact]
