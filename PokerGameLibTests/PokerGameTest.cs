@@ -13,33 +13,16 @@ namespace IQ.Game.Poker.Test
     {
 
         [Fact]
-        public void A_ranking_strategy_is_required()
+        public void Ranking_strategy_cannot_be_null()
         {
-            //Arrange
-            PokerGame pg = new PokerGame(null);
-
-            Player player1 = HandCreator.CreatePlayer("player1", new (CardSuit, CardRank)[]
-            {
-                (CardSuit.Spades, CardRank.King),
-                (CardSuit.Clubs, CardRank.Three),
-                (CardSuit.Clubs, CardRank.Four),
-                (CardSuit.Clubs, CardRank.Five),
-                (CardSuit.Clubs, CardRank.Six)
-            });
-
-            var players = new List<Player> { player1 };
-
-            //Act and Assert
-            var expectedMessage = "A ranking strategy is required to get winners!!";
-            var ex1 = Assert.Throws<InvalidOperationException>(() => pg.GetWinners(players));
+            //Arrange, Act and Assert
+            var expectedMessage = "Value cannot be null. (Parameter 'rankingStrategy')";
+            var ex1 = Assert.Throws<ArgumentNullException>(() => new PokerGame(null));
             Assert.Equal(expectedMessage, ex1.Message);
 
-            //Arrange
-            pg = new PokerGame();
-            pg.setRankingStrategy(null);
-
-            //Act and Assert
-            var ex2 = Assert.Throws<InvalidOperationException>(() => pg.GetWinners(players));
+            //Arrange, Act and Assert
+            PokerGame pg = new PokerGame();
+            var ex2 = Assert.Throws<ArgumentNullException>(() => pg.setRankingStrategy(null));
             Assert.Equal(expectedMessage, ex2.Message);
         }
 

@@ -19,12 +19,12 @@ namespace IQ.Game.Poker
 
         public PokerGame(IRankingStrategy rankingStrategy)
         {
-            _rankingStrategy = rankingStrategy;
+            this._rankingStrategy = rankingStrategy ?? throw new ArgumentNullException(nameof(rankingStrategy));
         }
 
         public void setRankingStrategy(IRankingStrategy rankingStrategy)
         {
-            this._rankingStrategy = rankingStrategy;
+            this._rankingStrategy = rankingStrategy ?? throw new ArgumentNullException(nameof(rankingStrategy));
         }
 
         public IList<Player> GetWinners(ICollection<Player> players)
@@ -34,7 +34,7 @@ namespace IQ.Game.Poker
                 return new List<Player>();
             }
 
-            if (this._rankingStrategy == null)
+            if (_rankingStrategy == null)
             {
                 throw new InvalidOperationException($"A ranking strategy is required to get winners!!");
             }
