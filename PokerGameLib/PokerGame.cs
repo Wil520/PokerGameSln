@@ -50,6 +50,7 @@ namespace IQ.Game.Poker
 
         private static void Log(ICollection<Player> players, IList<Player> winners)
         {
+            Console.WriteLine("-----------------------------");
             Console.WriteLine("Players:");
             Console.WriteLine("-----------------------------");
             foreach (var player in players)

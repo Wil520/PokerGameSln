@@ -24,6 +24,8 @@ namespace IQ.Game.Poker.Test
             PokerGame pg = new PokerGame();
             var ex2 = Assert.Throws<ArgumentNullException>(() => pg.setRankingStrategy(null));
             Assert.Equal(expectedMessage, ex2.Message);
+
+            new HandCreator().NextHighCard();
         }
 
         [Fact]
@@ -315,6 +317,92 @@ namespace IQ.Game.Poker.Test
             Assert.Single(winners);
             Assert.Equal("player1", winners[0].PlayerName);
             Assert.Equal(HandType.HighCard, winners[0].CardsType);
+        }
+
+        [Fact]
+        public void Random_Flush_beats_ThreeOfAKind_OnePair_HighCard()
+        {
+            PokerGame pg = new PokerGame();
+
+            for (int i = 0; i < 5; i++)
+            {
+                //Arrange
+                HandCreator handCreator = new HandCreator();
+                //Flush
+                Player player1 = new Player("player1", handCreator.NextFlush());
+                //ThreeOfAKind
+                Player player2 = new Player("player2", handCreator.NextThreeOfAKind());
+                //OnePair
+                Player player3 = new Player("player3", handCreator.NextOnePair());
+                //HighCard
+                Player player4 = new Player("player4", handCreator.NextHighCard());
+
+                var players = new List<Player> { player1, player2, player3, player4 };
+
+                //Act
+                var winners = pg.GetWinners(players);
+
+                //Assert
+                Assert.Single(winners);
+                Assert.Equal("player1", winners[0].PlayerName);
+                Assert.Equal(HandType.Flush, winners[0].CardsType);
+            }
+        }
+
+        [Fact]
+        public void Random_ThreeOfAKind_beats_OnePair_HighCard()
+        {
+            PokerGame pg = new PokerGame();
+
+            for (int i = 0; i < 5; i++)
+            {
+                //Arrange
+                HandCreator handCreator = new HandCreator();
+
+                //ThreeOfAKind
+                Player player2 = new Player("player2", handCreator.NextThreeOfAKind());
+                //OnePair
+                Player player3 = new Player("player3", handCreator.NextOnePair());
+                //HighCard
+                Player player4 = new Player("player4", handCreator.NextHighCard());
+
+                var players = new List<Player> { player2, player3, player4 };
+
+                //Act
+                var winners = pg.GetWinners(players);
+
+                //Assert
+                Assert.Single(winners);
+                Assert.Equal("player2", winners[0].PlayerName);
+                Assert.Equal(HandType.ThreeOfAKind, winners[0].CardsType);
+            }
+        }
+
+        [Fact]
+        public void Random_OnePair_beats_HighCard()
+        {
+            PokerGame pg = new PokerGame();
+
+            for (int i = 0; i < 5; i++)
+            {
+                //Arrange
+                HandCreator handCreator = new HandCreator();
+
+                //OnePair
+                Player player3 = new Player("player3", handCreator.NextOnePair());
+                //HighCard
+                Player player4 = new Player("player4", handCreator.NextHighCard());
+
+                var players = new List<Player> { player3, player4 };
+
+                //Act
+                var winners = pg.GetWinners(players);
+
+                //Assert
+                Assert.Single(winners);
+                Assert.Equal("player3", winners[0].PlayerName);
+                Assert.Equal(HandType.OnePair, winners[0].CardsType);
+            }
         }
 
         [Fact]
