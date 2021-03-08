@@ -1,11 +1,10 @@
 ## PokerGameSln
-A poker game library (in C#) which evaluates who are the winner(s) among several 5 card poker hands and the unit tests.
+A poker game library (in C#) which evaluates who are the winner(s) among several 5 card poker hands and the unit tests.  
 The following poker hands are implemented:
----------------------------
-• Flush
-• Three of a Kind
-• One Pair
-• High Card
+- Flush
+- Three of a Kind
+- One Pair
+- High Card
 ## How to run
 - cd PokerGameSln
 - dotnet build
